@@ -1,0 +1,29 @@
+{{#if msg}}
+  <p>{{msg}}</p>
+{{/if}}
+
+<h1>Usuários:</h1>
+
+<a href="/usuarios/novo">Cadastrar novo</a>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Nickname</th>
+    <th>Nome</th>
+    <th>Ações</th>
+  </tr>
+  {{#each usuarios}}
+    <tr>
+      <td>{{this.id}}</td>
+      <td>{{this.nickname}}</td>
+      <td>{{this.nome}}</td>
+      <td>
+        <a href="/usuarios/{{this.id}}/update">Atualizar</a>
+        <form action="/usuarios/{{this.id}}/delete" method="post">
+          <input type="submit" value="Excluir" />
+        </form>
+      </td>
+    </tr>
+  {{/each}}
+</table>
