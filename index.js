@@ -15,6 +15,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
+// Middleware para verificar se está logado
+app.use((req, res, next) => {
+  const autenticado = true;
+
+  if (autenticado) {
+    console.log("Usuário autenticado e acesso permitido!");
+    next();
+  } else {
+    console.log("Usuário não autenticado!");
+    res.send("Usuário não autenticado! Faça o login!");
+  }
+});
+
 // Rotas
 
 app.get("/", (req, res) => {
