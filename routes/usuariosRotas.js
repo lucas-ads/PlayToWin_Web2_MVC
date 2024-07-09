@@ -3,21 +3,6 @@ const router = express.Router();
 
 const UsuarioController = require("../controllers/UsuarioController");
 
-// Middleware para verificar sem tem permissão para gerenciar usuários
-router.use((req, res, next) => {
-  const role = {
-    usuarios: "all",
-  };
-
-  if (role.usuarios == "all") {
-    console.log("Tem permissão para gerenciar usuários!");
-    next();
-  } else {
-    console.log("Sem permissão para usuários!");
-    res.redirect("/");
-  }
-});
-
 router.get("/", UsuarioController.index);
 
 router.get("/novo", UsuarioController.getFormCadastro);

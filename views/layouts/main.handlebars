@@ -3,16 +3,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
     <header>
-      <h1>PlayToWin</h1>
+      <a href="/"><h1>PlayToWin</h1></a>
       <nav>
-        <a href="/usuarios">Usuários</a>
-        <a href="#">Jogos</a>
+        {{#if session.userId}}
+          <a href="/usuarios">Usuários</a>
+          <a href="#">Jogos</a>
+
+          <a href="/sair" class="sair">Sair</a>
+        {{else}}
+          <a href="/login">Entre</a>
+          <a href="/cadastro">Cadastre-se</a>
+        {{/if}}
       </nav>
     </header>
     <main>
+      {{#if messages.msg}}
+        <p class="flash-message">{{messages.msg}}</p>
+      {{/if}}
+
       {{{body}}}
     </main>
   </body>

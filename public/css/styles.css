@@ -1,0 +1,65 @@
+/* Configurações gerais */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: Helvetica, sans-serif;
+}
+
+:root {
+  --semi-black-color: #1e1c1f;
+  --ice-color: #d5dbde;
+  --blue-color: #0993ff;
+}
+
+/* Cabeçalho */
+
+header {
+  background-color: var(--semi-black-color);
+  padding: 1.5em 5em;
+  display: flex;
+  justify-content: space-between;
+}
+
+header h1 {
+  color: var(--ice-color);
+  border-bottom: 3px solid var(--blue-color);
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+}
+
+header nav a {
+  font-size: 1.3em;
+  margin: 0 1em;
+  color: var(--ice-color);
+  border-bottom: 3px solid transparent;
+}
+
+header nav a.sair {
+  color: red;
+}
+
+header nav a:hover {
+  border-bottom: 3px solid var(--blue-color);
+}
+
+/* Corpo da página */
+
+main {
+  padding: 1.5em 5em;
+}
+
+main p.flash-message {
+  background-color: rgb(252, 248, 190);
+  padding: 1em;
+  border-radius: 0.5em;
+  color: rgb(97, 93, 49);
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}

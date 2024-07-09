@@ -2,10 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const exphbs = require("express-handlebars");
 
+const session = require("express-session");
+const FileStore = require("session-file-store")(session);
+const flash = require("express-flash");
+
 const conn = require("./db/conn");
 const Usuario = require("./models/Usuario");
-
 const rotasUsuarios = require("./routes/usuariosRotas");
+const authRotas = require("./routes/authRotas");
 
 const app = express();
 
@@ -15,20 +19,41 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-// Middleware para verificar se está logado
-app.use((req, res, next) => {
-  const autenticado = true;
+// Definição e configuração da sessão
 
-  if (autenticado) {
-    console.log("Usuário autenticado e acesso permitido!");
-    next();
-  } else {
-    console.log("Usuário não autenticado!");
-    res.send("Usuário não autenticado! Faça o login!");
+app.use(
+  session({
+    name: "session",
+    secret: "nosso_secret",
+    resave: false,
+    saveUninitialized: false,
+    store: new FileStore({
+      logFn: function () {},
+      path: require("path").join(__dirname, "sessions"),
+    }),
+    cookie: {
+      secure: false,
+      //maxAge: 3600000,
+      httpOnly: true,
+    },
+  })
+);
+
+// Flash Messages
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  if (req.session.userId) {
+    res.locals.session = req.session;
   }
+
+  next();
 });
 
 // Rotas
+
+app.use("/", authRotas);
 
 app.get("/", (req, res) => {
   res.render("home");
