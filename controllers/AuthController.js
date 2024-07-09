@@ -7,6 +7,42 @@ module.exports = class AuthController {
     res.render("auth/login");
   }
 
+  static async loginPost(req, res) {
+    const { nickname, password } = req.body;
+
+    // Verificação de nickname
+
+    const usuario = await Usuario.findOne({ where: { nickname: nickname } });
+
+    if (!usuario) {
+      req.flash("msg", "Usuário não encontrado!");
+
+      AuthController.login(req, res);
+      return;
+    }
+
+    // Verificação de senha
+
+    const senhaCorreta = bcrypt.compareSync(password, usuario.password);
+
+    if (!senhaCorreta) {
+      req.flash("msg", "Senha inválida!");
+
+      AuthController.login(req, res);
+      return;
+    }
+
+    // Autentica
+
+    req.flash("msg", "Autenticado com sucesso!");
+
+    req.session.userId = usuario.id;
+
+    req.session.save(() => {
+      res.redirect("/");
+    });
+  }
+
   static signup(req, res) {
     res.render("auth/signup");
   }
@@ -54,5 +90,27 @@ module.exports = class AuthController {
     req.session.save(() => {
       res.redirect("/");
     });
+  }
+
+  static logout(req, res) {
+    req.session.destroy();
+
+    res.redirect("/login");
+  }
+
+  static makeAuthMiddleware(req, res, next) {
+    if (!req.session.userId) {
+      req.flash(
+        "msg",
+        "Você precisa estar autenticado para acessar esta página!"
+      );
+
+      req.session.save(() => {
+        res.redirect("/login");
+      });
+      return;
+    }
+
+    next();
   }
 };

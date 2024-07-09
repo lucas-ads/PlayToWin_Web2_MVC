@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const UsuarioController = require("../controllers/UsuarioController");
+const AuthController = require("../controllers/AuthController");
+
+router.use(AuthController.makeAuthMiddleware);
 
 router.get("/", UsuarioController.index);
 
